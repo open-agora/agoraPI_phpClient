@@ -12,11 +12,11 @@ if (empty($pollId)) {
 
 $curlClient = new CurlClient($baseUrl, $key);
 
-$choices = json_decode($curlClient->listChoices($pollId));
-$votes = json_decode($curlClient->getVotes($pollId));
+$choices = $curlClient->listChoices($pollId);
+$votes = $curlClient->getVotes($pollId);
 
-$resultMajority = json_decode($curlClient->getResult($pollId));
-$resultCondorcet = json_decode($curlClient->getResult($pollId, 'condorcet', 'hbar'));
+$resultMajority = $curlClient->getResult($pollId);
+$resultCondorcet = $curlClient->getResult($pollId, 'condorcet', 'hbar');
 ?>
 <!DOCTYPE html>
 <html>

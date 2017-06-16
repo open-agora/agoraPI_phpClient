@@ -12,7 +12,7 @@ if (empty($pollId)) {
 
 $curlClient = new CurlClient($baseUrl, $key);
 
-$choices = json_decode($curlClient->listChoices($pollId));
+$choices = $curlClient->listChoices($pollId);
 
 ?>
 <!DOCTYPE html>

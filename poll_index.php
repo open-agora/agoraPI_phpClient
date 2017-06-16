@@ -6,7 +6,7 @@ require __DIR__ . '/OA/CurlClient.php';
 
 $curlClient = new CurlClient();
 
-$polls = json_decode($curlClient->listPolls());
+$polls = $curlClient->listPolls();
 
 ?>
 <!DOCTYPE html>
