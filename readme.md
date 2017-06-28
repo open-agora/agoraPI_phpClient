@@ -1,6 +1,6 @@
 # Open Agora basic curl php client
 
-This is a very simple client for [https://www.open-agora.com/api](AgoraPI). It is intended to demonstrate and test voting functionality of Open Agora voting API.
+This is a very simple client for [AgoraPI](https://www.open-agora.com/api). It is intended to demonstrate and test voting functionality of Open Agora voting API.
 
 **This code is not intended for production use.**
 
@@ -8,7 +8,7 @@ This is a very simple client for [https://www.open-agora.com/api](AgoraPI). It i
 
 In order to use these files, you need the following:
 
-1. An AgoraPI access key (and the associated token). You may register on [https://www.open-agora.com/api](Open Agora website) for free.
+1. An AgoraPI access key (and the associated token). You may register on [Open Agora website](https://www.open-agora.com/api) for free.
 1. PHP installed on your machine (or some server). More precisely, you need PHP CLI and PHP Curl above 5.4. We recommand PHP 7.
 1. Having a running Apache or Nginx is optional since you may try our code with PHP builtin server.
 1. That's about it. In case of trouble you may get in touche with us: contact@open-agora.com
