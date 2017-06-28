@@ -29,6 +29,9 @@ In particular we skip completely every element related to user management. Agora
 (each user may cat at most a vote for a given poll). In order to make the best use of AgoraPI you need to understand how user work, and what they are
 entilted to do. It is also important with respect to anonymous votes.
 
+:warning: In our curl functions we do not take paging into account. We always assume that there are less than 10 results (this is the default value where AgoraPI starts paging the results). If you intend to develop a more advanced
+application, you need to take paging into account.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

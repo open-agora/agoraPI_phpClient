@@ -19,8 +19,10 @@ $votes = $curlClient->getVotes($pollId);
 $resultMajority = $curlClient->getResultUrl($pollId);
 $resultCondorcet = $curlClient->getResultUrl($pollId, 'condorcet', 'hbar');
 
-$resultMajorityText = stringResult($curlClient->getResult($pollId));
+$rawMajority = $curlClient->getResult($pollId);
+$resultMajorityText = stringResult($rawMajority);
 $resultCondorcetText = stringResult($curlClient->getResult($pollId, 'condorcet'));
+$nbVots = nbVoters($votes);
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,7 +61,7 @@ $resultCondorcetText = stringResult($curlClient->getResult($pollId, 'condorcet')
                     <button type="submit" class="btn btn-primary">vote</button>
                 </form>
                 <hr />
-                <p>Total number of ranks: <?php echo count($votes); ?></p>
+                <p>Total number of voters: <?php echo $nbVots; ?></p>
                 <div class="row">
                     <div class="col-md-7">
                         <h2>Majority Result</h2>
