@@ -21,6 +21,14 @@ In order to use these files, you need the following:
 1. In the root directory, you may simply type: `php -S localhost:8888 -t .`. You should keep this server running in a console.
 1. In a browser, got to [http://localhost:8888/poll_index.php](http://localhost:8888/poll_index.php).
 
+## Caveat
+
+With these files we present some aspects of building a client for AgoraPI. However, we do not get very deep into every functionality of our API.
+
+In particular we skip completely every element related to user management. AgoraPI makes it possible to have users, who may create polls and cast vote
+(each user may cat at most a vote for a given poll). In order to make the best use of AgoraPI you need to understand how user work, and what they are
+entilted to do. It is also important with respect to anonymous votes.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
