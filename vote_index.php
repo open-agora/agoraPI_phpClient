@@ -33,7 +33,7 @@ $resultCondorcet = json_decode($curlClient->getResult($pollId, 'condorcet', 'hba
                 <form method="POST" action="_vote_send.php">
                     <input name="poll_id" type="hidden" value="<?php echo $pollId; ?>">
                     <ul class="list-group">
-                        <?php foreach ($choices as $choice): ?>
+                        <?php foreach ((array) $choices as $choice): ?>
                             <li class="list-group-item">
                                 <div class="form-group row">
                                     <div class="col-md-1"><?php echo $choice->num; ?></div>

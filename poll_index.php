@@ -33,7 +33,7 @@ $polls = json_decode($curlClient->listPolls());
                     <div class="col-md-4">
                         <h2>Polls list</h2>
                         <ul class="list-group">
-                            <?php foreach ($polls as $poll): ?>
+                            <?php foreach ((array) $polls as $poll): ?>
                                 <li class="list-group-item">
                                     <?php echo $poll->title; ?><br />
                                     <a href="poll_choices.php?id=<?php echo $poll->id; ?>" class="btn btn-default" role="button">Edit</a>
@@ -41,7 +41,7 @@ $polls = json_decode($curlClient->listPolls());
                                     <a href="vote_index.php?id=<?php echo $poll->id; ?>" class="btn btn-default" role="button">Vote</a>
                                 </li>
                             <?php endforeach; ?>
-                        </ul> 
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -11,6 +11,7 @@ class CurlClient {
         $ini = parse_ini_file("api.ini");
         $this->baseUrl = $ini['base_url'];
         $this->token = $ini['token'];
+
     }
 
     public function listPolls() {
