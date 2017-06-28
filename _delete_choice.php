@@ -8,7 +8,7 @@ $id = $_GET['id'];
 $pollId = $_GET['poll_id'];
 
 if (!empty($id)) {
-    $curlClient = new CurlClient($baseUrl, $key);
+    $curlClient = new CurlClient();
     $curlClient->deleteChoice($id);
 }
 

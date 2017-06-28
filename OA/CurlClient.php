@@ -148,13 +148,30 @@ class CurlClient {
 
     /**
      * Take a poll id and two parameters.
+     * Return a result object, wich is the json result assuming that everything
+     * fits into a single page.
+     * @param string $pollId
+     * @param string $resultType, can be majority or condorcet
+     * @return result object
+     */
+    public function getResult($pollId, $resultType = 'majority') {
+        $query = http_build_query(array(
+            'api_token' => $this->token,
+        ));
+        $url = $this->baseUrl . "/polls/$pollId/results/$resultType?" . $query;
+        $result = json_decode($this->get($url));
+        return $result;
+    }
+
+    /**
+     * Take a poll id and two parameters.
      * Return a result object, wich hold an url to a graphic view of the result
      * @param string $pollId
      * @param string $resultType, can be majority or condorcet
      * @param string $chartType, can be hbar, vbar or pie
      * @return result object
      */
-    public function getResult($pollId, $resultType = 'majority', $chartType = 'vbar') {
+    public function getResultUrl($pollId, $resultType = 'majority', $chartType = 'vbar') {
         $query = http_build_query(array(
             'api_token' => $this->token,
         ));

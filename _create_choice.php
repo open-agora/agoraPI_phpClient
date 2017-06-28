@@ -8,7 +8,7 @@ $pollId = $_POST['poll_id'];
 $label = $_POST['label'];
 
 if (!empty($label)) {
-    $curlClient = new CurlClient($baseUrl, $key);
+    $curlClient = new CurlClient();
     $curlClient->createChoice($pollId, $label);
 }
 

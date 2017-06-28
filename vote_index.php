@@ -3,6 +3,7 @@
 use OA\CurlClient;
 
 require __DIR__ . '/OA/CurlClient.php';
+require __DIR__ . '/OA/AuxFuncs.php';
 
 $pollId = $_GET['id'];
 
@@ -10,13 +11,16 @@ if (empty($pollId)) {
     header('Location: curl_index.php');
 }
 
-$curlClient = new CurlClient($baseUrl, $key);
+$curlClient = new CurlClient();
 
 $choices = $curlClient->listChoices($pollId);
 $votes = $curlClient->getVotes($pollId);
 
-$resultMajority = $curlClient->getResult($pollId);
-$resultCondorcet = $curlClient->getResult($pollId, 'condorcet', 'hbar');
+$resultMajority = $curlClient->getResultUrl($pollId);
+$resultCondorcet = $curlClient->getResultUrl($pollId, 'condorcet', 'hbar');
+
+$resultMajorityText = stringResult($curlClient->getResult($pollId));
+$resultCondorcetText = stringResult($curlClient->getResult($pollId, 'condorcet'));
 ?>
 <!DOCTYPE html>
 <html>
@@ -55,20 +59,31 @@ $resultCondorcet = $curlClient->getResult($pollId, 'condorcet', 'hbar');
                     <button type="submit" class="btn btn-primary">vote</button>
                 </form>
                 <hr />
-                <p>nb votes : <?php echo count($votes); ?></p>
+                <p>Total number of ranks: <?php echo count($votes); ?></p>
                 <div class="row">
                     <div class="col-md-7">
-                        <h2>Majority</h2>
+                        <h2>Majority Result</h2>
                         <img src="<?php echo $resultMajority->url; ?>">
                     </div>
                     <div class="col-md-5">
-                        <h2>Condorcet</h2>
+                        <h2>Condorcet Result</h2>
                         <img src="<?php echo $resultCondorcet->url; ?>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <h2>Majority Result (textual)</h2>
+                        <p><?php echo $resultMajorityText; ?></p>
+                    </div>
+                    <div class="col-md-5">
+                        <h2>Condorcet Result (textual)</h2>
+                        <p><?php echo $resultCondorcetText; ?></p>
                     </div>
                 </div>
                 <br />
                 <br />
                 <br />
+                <a href="poll_index.php" class="btn btn-lg btn-primary" role="button">Back</a>
             </div>
         </div>
     </body>
