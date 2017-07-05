@@ -38,6 +38,9 @@ $nbVots = nbVoters($votes);
         .condorcet {
             display: none;
         }
+        .mybutton{
+            min-width: 30em;
+        }
         </style>
     </head>
     <body>
@@ -70,7 +73,7 @@ $nbVots = nbVoters($votes);
                 </form>
                 <hr />
                 <p>Total number of voters: <?php echo $nbVots; ?></p>
-                <button id="switch" onclick="switchDisplay()" class="btn btn-primary">Switch to Condorcet result</button>
+                <button id="switch" onclick="switchDisplay()" class="btn btn-primary mybutton">Switch to Condorcet result</button>
                 <div class="row">
                     <div class="col-md-12">
                         <div class='majority'>
