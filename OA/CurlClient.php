@@ -1,6 +1,9 @@
 <?php
 
 /**
+ * This file defines a class used to perform basic operations related to AgoraPI.
+ * Most methods of this class interact with AgoraPI and relates to elements located in this API.
+ *
  * This file is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
  */
 
@@ -12,18 +15,17 @@ class CurlClient {
     private $token;
 
     /**
-     * Create the client. Parse the api.ini to initialize bas url an key token.
+     * Constructor: parses api.ini to initialize API base url and key token.
      */
     public function __construct() {
         $ini = parse_ini_file("api.ini");
         $this->baseUrl = $ini['base_url'];
         $this->token = $ini['token'];
-
     }
 
     /**
-     * Query the service to get all polls associated with the client key.
-     * Return an array of poll objects.
+     * Queries AgoraPI to get all the polls associated with the client key.
+     * Returns an array of poll objects.
      * @return array of poll objects
      */
     public function listPolls() {
@@ -35,7 +37,7 @@ class CurlClient {
     }
 
     /**
-     * Quick creation of a poll from the service with minimal information (title only)
+     * Quick creation of a poll with minimal information (title only).
      * @param string $title
      * @return poll object
      */
@@ -50,9 +52,9 @@ class CurlClient {
     }
 
     /**
-     * Take a poll id an delete it from the service
-     * @param type $pollId
-     * @return type
+     * Deletes a poll associated with ID $pollId.
+     * @param string $pollId
+     * @return RESULT
      */
     public function deletePoll($pollId) {
         $query = http_build_query(array(
@@ -63,8 +65,8 @@ class CurlClient {
     }
 
     /**
-     * Take a poll id and return the list of choices linked to it
-     * @param type $pollId
+     * Returns the list of choices associated to the poll of ID $pollId
+     * @param string $pollId
      * @return array of choice objects
      */
     public function listChoices($pollId) {
@@ -77,7 +79,7 @@ class CurlClient {
     }
 
     /**
-     * take a choice id and return the corresponding choice object
+     * Returns the corresponding choice object from a $choiceId
      * @param string $choiceId
      * @return choice object
      */
@@ -90,7 +92,7 @@ class CurlClient {
     }
 
     /**
-     * Quick creation of a choice linked to a poll with minimal information (pollId and label)
+     * Creation of a choice associated with a poll from minimal information ($pollId and choice $label)
      * @param string $pollId
      * @param string $label
      * @return choice object
@@ -108,7 +110,7 @@ class CurlClient {
     }
 
     /**
-     * Take a choice id and delete it from the service
+     * Deletes choice $choiceId
      * @param string $choiceId
      * @return type
      */
@@ -121,9 +123,10 @@ class CurlClient {
     }
 
     /**
-     * Take a poll id and an array of votes with minimal information (choice id and rank)
-     * And send the vote to the service.
-     * ther is no notion of user here. Each vote is individually processed with a user created each time.
+     * Takes $pollId, an array of votes $votes, with minimal information (choice id and rank)
+     * and sends the vote.
+     * There is no user here. Each call to sendVote is processed individually and a user is created.
+     * One new user per call.
      * @param type $pollId
      * @param array $votes
      * @return vote object (containing the id of the created user)
@@ -137,7 +140,7 @@ class CurlClient {
     }
 
     /**
-     * Take a poll id and return an array of votes object (triplet choice/ rank / user)
+     * Returns an array of votes object (triplet choice/ rank / user) from $pollId.
      * @param string $pollId
      * @return array of vote object
      */
@@ -151,9 +154,9 @@ class CurlClient {
     }
 
     /**
-     * Take a poll id and two parameters.
-     * Return a result object, wich is the json result assuming that everything
-     * fits into a single page.
+     * Return a result object from $pollId and $resultType,
+     * this result is array of json objects, assuming that the whole array
+     * fits into a single page (i.e;, there are less than 10 choices).
      * @param string $pollId
      * @param string $resultType, can be majority or condorcet
      * @return result object
@@ -168,8 +171,8 @@ class CurlClient {
     }
 
     /**
-     * Take a poll id and two parameters.
-     * Return a result object, wich hold an url to a graphic view of the result
+     * Returns a result object from $pollId, $resultType and $chartType, this result²
+     * holds an url to a graphic view of the result.
      * @param string $pollId
      * @param string $resultType, can be majority or condorcet
      * @param string $chartType, can be hbar, vbar or pie
@@ -184,7 +187,7 @@ class CurlClient {
     }
 
     /**
-     * Execute a GET request on the given url, and return the response
+     * Executes a GET request on the given url, and returns the response
      * @param string $url
      * @return string
      * @throws \LogicException
@@ -203,8 +206,8 @@ class CurlClient {
     }
 
     /**
-     * Execute a POST request on the given url. The data provided is encoded and added as json payload.
-     * Return the response
+     * Executes a POST request on the given url. The data provided is encoded and added as json payload.
+     * Returns the response
      * @param string $url
      * @param object $data
      * @return string
@@ -228,8 +231,8 @@ class CurlClient {
     }
 
     /**
-     * Execute a DELETE request on the given user.
-     * Return the response
+     * Executes a DELETE request on the given user.
+     * Returns the response
      * @param string $url
      * @return type
      * @throws \LogicException
@@ -247,5 +250,4 @@ class CurlClient {
         curl_close($ch);
         return $output;
     }
-
 }
