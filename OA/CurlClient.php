@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * This file defines a class used to perform basic operations related to AgoraPI.
+ * Most methods of this class interact with AgoraPI and relates to elements located in this API.
+ *
+ * This file is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+ */
+
 namespace OA;
 
 class CurlClient {
@@ -7,21 +14,33 @@ class CurlClient {
     private $baseUrl;
     private $token;
 
+    /**
+     * Constructor: parses api.ini to initialize API base url and key token.
+     */
     public function __construct() {
         $ini = parse_ini_file("api.ini");
         $this->baseUrl = $ini['base_url'];
         $this->token = $ini['token'];
-
     }
 
+    /**
+     * Queries AgoraPI to get all the polls associated with the client key.
+     * Returns an array of poll objects.
+     * @return array of poll objects
+     */
     public function listPolls() {
         $query = http_build_query(array(
             'api_token' => $this->token,
         ));
         $url = $this->baseUrl . '/polls?' . $query;
-        return $this->get($url);
+        return json_decode($this->get($url));
     }
 
+    /**
+     * Quick creation of a poll with minimal information (title only).
+     * @param string $title
+     * @return poll object
+     */
     public function createPoll($title) {
         $query = http_build_query(array(
             'api_token' => $this->token,
@@ -29,9 +48,14 @@ class CurlClient {
         $url = $this->baseUrl . '/polls?' . $query;
         $data = ["title" => $title];
 
-        return $this->post($url, $data);
+        return json_decode($this->post($url, $data));
     }
 
+    /**
+     * Deletes a poll associated with ID $pollId.
+     * @param string $pollId
+     * @return RESULT
+     */
     public function deletePoll($pollId) {
         $query = http_build_query(array(
             'api_token' => $this->token,
@@ -40,23 +64,39 @@ class CurlClient {
         return $this->delete($url);
     }
 
+    /**
+     * Returns the list of choices associated to the poll of ID $pollId
+     * @param string $pollId
+     * @return array of choice objects
+     */
     public function listChoices($pollId) {
         $query = http_build_query(array(
             'api_token' => $this->token,
             'poll_id' => $pollId,
         ));
         $url = $this->baseUrl . '/choices?' . $query;
-        return $this->get($url);
+        return json_decode($this->get($url));
     }
 
+    /**
+     * Returns the corresponding choice object from a $choiceId
+     * @param string $choiceId
+     * @return choice object
+     */
     public function getChoice($choiceId) {
         $query = http_build_query(array(
             'api_token' => $this->token,
         ));
         $url = $this->baseUrl . "/choices/$choiceId?" . $query;
-        return $this->get($url);
+        return json_decode($this->get($url));
     }
 
+    /**
+     * Creation of a choice associated with a poll from minimal information ($pollId and choice $label)
+     * @param string $pollId
+     * @param string $label
+     * @return choice object
+     */
     public function createChoice($pollId, $label) {
         $query = http_build_query(array(
             'api_token' => $this->token,
@@ -66,9 +106,14 @@ class CurlClient {
             "poll_id" => $pollId,
             "label" => $label,
         ];
-        return $this->post($url, $data);
+        return json_decode($this->post($url, $data));
     }
 
+    /**
+     * Deletes choice $choiceId
+     * @param string $choiceId
+     * @return type
+     */
     public function deleteChoice($choiceId) {
         $query = http_build_query(array(
             'api_token' => $this->token,
@@ -77,31 +122,76 @@ class CurlClient {
         return $this->delete($url);
     }
 
+    /**
+     * Takes $pollId, an array of votes $votes, with minimal information (choice id and rank)
+     * and sends the vote.
+     * There is no user here. Each call to sendVote is processed individually and a user is created.
+     * One new user per call.
+     * @param type $pollId
+     * @param array $votes
+     * @return vote object (containing the id of the created user)
+     */
     public function sendVote($pollId, $votes) {
         $query = http_build_query(array(
             'api_token' => $this->token,
         ));
         $url = $this->baseUrl . "/votes/for-poll/$pollId?" . $query;
-        return $this->post($url, $votes);
+        return json_decode($this->post($url, $votes));
     }
 
+    /**
+     * Returns an array of votes object (triplet choice/ rank / user) from $pollId.
+     * @param string $pollId
+     * @return array of vote object
+     */
     public function getVotes($pollId) {
         $query = http_build_query(array(
             'api_token' => $this->token,
             'poll_id' => $pollId,
         ));
         $url = $this->baseUrl . '/votes?' . $query;
-        return $this->get($url);
+        return json_decode($this->get($url));
     }
 
-    public function getResult($pollId, $resultType = 'majority', $chartType = 'vbar') {
+    /**
+     * Return a result object from $pollId and $resultType,
+     * this result is array of json objects, assuming that the whole array
+     * fits into a single page (i.e;, there are less than 10 choices).
+     * @param string $pollId
+     * @param string $resultType, can be majority or condorcet
+     * @return result object
+     */
+    public function getResult($pollId, $resultType = 'majority') {
+        $query = http_build_query(array(
+            'api_token' => $this->token,
+        ));
+        $url = $this->baseUrl . "/polls/$pollId/results/$resultType?" . $query;
+        $result = json_decode($this->get($url));
+        return $result;
+    }
+
+    /**
+     * Returns a result object from $pollId, $resultType and $chartType, this result²
+     * holds an url to a graphic view of the result.
+     * @param string $pollId
+     * @param string $resultType, can be majority or condorcet
+     * @param string $chartType, can be hbar, vbar or pie
+     * @return result object
+     */
+    public function getResultUrl($pollId, $resultType = 'majority', $chartType = 'vbar') {
         $query = http_build_query(array(
             'api_token' => $this->token,
         ));
         $url = $this->baseUrl . "/polls/$pollId/results/$resultType/charts/$chartType?" . $query;
-        return $this->get($url);
+        return json_decode($this->get($url));
     }
 
+    /**
+     * Executes a GET request on the given url, and returns the response
+     * @param string $url
+     * @return string
+     * @throws \LogicException
+     */
     private function get($url) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -115,6 +205,14 @@ class CurlClient {
         return $output;
     }
 
+    /**
+     * Executes a POST request on the given url. The data provided is encoded and added as json payload.
+     * Returns the response
+     * @param string $url
+     * @param object $data
+     * @return string
+     * @throws \LogicException
+     */
     private function post($url, $data) {
         $payload = json_encode($data);
         $ch = curl_init();
@@ -132,6 +230,13 @@ class CurlClient {
         return $output;
     }
 
+    /**
+     * Executes a DELETE request on the given user.
+     * Returns the response
+     * @param string $url
+     * @return type
+     * @throws \LogicException
+     */
     private function delete($url) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -145,5 +250,4 @@ class CurlClient {
         curl_close($ch);
         return $output;
     }
-
 }

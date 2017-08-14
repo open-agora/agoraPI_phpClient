@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This file is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+ */
+
 use OA\CurlClient;
 
 require __DIR__ . '/OA/CurlClient.php';
@@ -10,9 +14,9 @@ if (empty($pollId)) {
     header('Location: curl_index.php');
 }
 
-$curlClient = new CurlClient($baseUrl, $key);
+$curlClient = new CurlClient();
 
-$choices = json_decode($curlClient->listChoices($pollId));
+$choices = $curlClient->listChoices($pollId);
 
 ?>
 <!DOCTYPE html>
@@ -46,7 +50,7 @@ $choices = json_decode($curlClient->listChoices($pollId));
                                     <a href="_delete_choice.php?id=<?php echo $choice->id . "&poll_id=$pollId"; ?>" class="btn btn-default" role="button">Delete</a>
                                 </li>
                             <?php endforeach; ?>
-                        </ul> 
+                        </ul>
                     </div>
                 </div>
                 <a href="poll_index.php" class="btn btn-lg btn-primary" role="button">Back</a>
