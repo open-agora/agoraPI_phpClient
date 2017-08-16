@@ -33,7 +33,7 @@ $choices = $curlClient->listChoices($pollId);
                 <div class="row">
                     <div class="col-md-6">
                         <h2>Create choice</h2>
-                        <form method="POST" action="_create_choice.php">
+                        <form method="POST" action="_choice_create.php">
                             <input name="poll_id" type="hidden" value="<?php echo $pollId; ?>">
                             <div class="form-group">
                                 <input name="label" type="text" class="form-control" placeholder="Label">
@@ -47,7 +47,7 @@ $choices = $curlClient->listChoices($pollId);
                             <?php foreach ($choices as $choice): ?>
                                 <li class="list-group-item">
                                     <?php echo $choice->label; ?><br />
-                                    <a href="_delete_choice.php?id=<?php echo $choice->id . "&poll_id=$pollId"; ?>" class="btn btn-default" role="button">Delete</a>
+                                    <a href="_choice_delete.php?id=<?php echo $choice->id . "&poll_id=$pollId"; ?>" class="btn btn-default" role="button">Delete</a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>

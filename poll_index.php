@@ -27,7 +27,7 @@ $polls = $curlClient->listPolls();
                 <div class="row">
                     <div class="col-md-8">
                         <h2>Create poll</h2>
-                        <form method="POST" action="_create_poll.php">
+                        <form method="POST" action="_poll_create.php">
                             <div class="form-group">
                                 <input name="title" type="text" class="form-control" placeholder="Title">
                             </div>
@@ -41,7 +41,7 @@ $polls = $curlClient->listPolls();
                                 <li class="list-group-item">
                                     <?php echo $poll->title; ?><br />
                                     <a href="poll_choices.php?id=<?php echo $poll->id; ?>" class="btn btn-default" role="button">Edit</a>
-                                    <a href="_delete_poll.php?id=<?php echo $poll->id; ?>" class="btn btn-default" role="button">Delete</a>
+                                    <a href="_poll_delete.php?id=<?php echo $poll->id; ?>" class="btn btn-default" role="button">Delete</a>
                                     <a href="vote_index.php?id=<?php echo $poll->id; ?>" class="btn btn-default" role="button">Vote</a>
                                 </li>
                             <?php endforeach; ?>
