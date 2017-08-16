@@ -2,7 +2,7 @@
 
 /**
  * This file defines a class used to perform basic operations related to AgoraPI.
- * Most methods of this class interact with AgoraPI and relates to elements located in this API.
+ * Most methods of this class interact with AgoraPI and relate to elements located in this API.
  *
  * This file is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
  */
@@ -15,7 +15,7 @@ class CurlClient {
     private $token;
 
     /**
-     * Constructor: parses api.ini to initialize API base url and key token.
+     * Constructor: parses api.ini to initialize API base URL and key token.
      */
     public function __construct() {
         $ini = parse_ini_file("api.ini");

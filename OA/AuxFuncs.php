@@ -9,7 +9,7 @@
 
 /**
  * Constructs a string representation of a poll result (in this case a sequence of choice labels and scores).
- * (See on-line documentation: https://api.open-agora.com/docs/#!/polls/getPollResults )
+ * (See online documentation: https://api.open-agora.com/docs/#!/polls/getPollResults )
  * This function is a simple example of extraction of some values from a poll result.
  *
  * @param object $result
