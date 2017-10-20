@@ -35,15 +35,16 @@ function stringResult($result) {
  * @return Set of voters
  */
 function votersSet($votes) {
-    $result = [];
+    $resultSet = [];
     foreach ($votes as $aVote) {
         /*
          * Iteration over votes
          * Get the user_id (the user) associated with each vote.
          * Add it in the array if not already in the array (like in a set).
          */
-         if (! in_array($aVote->user_id , $resultSet )){
-             $resultSet[]=$aVote->user_id;
+         $id = $aVote->user->id;
+         if (! in_array($id , $resultSet )){
+             $resultSet[]=$id;
          }
     }
     return $resultSet;
