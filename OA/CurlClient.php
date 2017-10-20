@@ -31,6 +31,7 @@ class CurlClient {
     public function listPolls() {
         $query = http_build_query(array(
             'api_token' => $this->token,
+            'page_size' => 100,
         ));
         $url = $this->baseUrl . '/polls?' . $query;
         return json_decode($this->get($url));
@@ -73,6 +74,7 @@ class CurlClient {
         $query = http_build_query(array(
             'api_token' => $this->token,
             'poll_id' => $pollId,
+            'page_size' => 100, // In this case, the page_size is probably too much
         ));
         $url = $this->baseUrl . '/choices?' . $query;
         return json_decode($this->get($url));
@@ -148,6 +150,7 @@ class CurlClient {
         $query = http_build_query(array(
             'api_token' => $this->token,
             'poll_id' => $pollId,
+            'page_size' => 100,
         ));
         $url = $this->baseUrl . '/votes?' . $query;
         return json_decode($this->get($url));
@@ -164,6 +167,7 @@ class CurlClient {
     public function getResult($pollId, $resultType = 'majority') {
         $query = http_build_query(array(
             'api_token' => $this->token,
+            'page_size' => 100,
         ));
         $url = $this->baseUrl . "/polls/$pollId/results/$resultType?" . $query;
         $result = json_decode($this->get($url));
