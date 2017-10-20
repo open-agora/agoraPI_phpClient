@@ -38,7 +38,7 @@ It is also important with respect to anonymous voting.
 
 :warning: AgoraPI implements a REST model, and **paginates** sets of resources (like the list of voters).
 However, the curl functions in the present repository do not take pagination into account.
-It is always assumed that there are less than 25 results (AgoraPI default page size).
+It is always assumed that there are less than 100 results (explicit page size used within this project).
 If you intend to develop a more advanced application, **you must take pagination into account**.
 
 ## License

@@ -29,13 +29,18 @@ function stringResult($result) {
 }
 
 /**
- * Computes an array of voters from the votes of a given poll.
+ * Computes an array formed by :
+ *   the set of voters
+ *   the string of non anonymous voters
+ *   the number of anonymous voters
  *
  * @param string $votes
- * @return Set of voters
+ * @return array
  */
-function votersSet($votes) {
+function votersData($votes) {
     $resultSet = [];
+    $names = "";
+    $nbAnon = 0;
     foreach ($votes as $aVote) {
         /*
          * Iteration over votes
@@ -45,9 +50,17 @@ function votersSet($votes) {
          $id = $aVote->user->id;
          if (! in_array($id , $resultSet )){
              $resultSet[]=$id;
+             $username = $aVote->user->name;
+             if ($username !="" && strcasecmp($username, "anonymous")!=0 ){
+                 //strcasecmp: case insensitive comparison
+                 if ($names == "")$names = $username;
+                 else $names = $names.", ".$username;
+             }else{
+                 $nbAnon += 1;
+             }
          }
     }
-    return $resultSet;
+    return array($resultSet, $names, $nbAnon);
 }
 
 
@@ -57,6 +70,6 @@ function votersSet($votes) {
  * @param object $votes
  * @return string of result
  */
-function nbVoters($votes) {
-    return count( votersSet($votes) );
-}
+/*function nbVoters($votes) {
+    return count( votersSet($votes, "id") );
+    }*/

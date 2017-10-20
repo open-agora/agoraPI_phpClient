@@ -10,10 +10,19 @@ require __DIR__ . '/OA/CurlClient.php';
 
 $pollId = $_POST['poll_id'];
 $rank = $_POST['rank'];
+$name = $_POST['name'];
+
+if ($name == ""){
+    $name="Anonymous";
+}
 
 if (empty($pollId)) {
     header('Location: curl_vote.php' . "?id=$pollId");
 }
+
+$user = array(
+    'name' => $name,
+);
 
 $votes = array();
 foreach($rank as $choiceId => $rank) {
@@ -23,6 +32,7 @@ foreach($rank as $choiceId => $rank) {
     $vote = array(
         'choice_id' => $choiceId,
         'rank' => (int)$rank,
+        'user' => $user,
     );
     $votes[] = $vote;
 }

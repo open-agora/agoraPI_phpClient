@@ -81,7 +81,20 @@ class CurlClient {
     }
 
     /**
-     * Returns the corresponding choice object from a $choiceId
+    * Returns the information data of a poll from $pollId
+    * @param string $pollId
+    * @return poll object
+    */
+    public function getPollData($pollId) {
+        $query = http_build_query(array(
+            'api_token' => $this->token,
+        ));
+        $url = $this->baseUrl . "/polls/$pollId?" . $query;
+        return json_decode($this->get($url));
+    }
+
+    /**
+     * Returns the corresponding choice object from $choiceId
      * @param string $choiceId
      * @return choice object
      */
