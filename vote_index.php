@@ -15,23 +15,31 @@ $pollId = $_GET['id'];
 if (empty($pollId)) {
     header('Location: curl_index.php');
 }
-
+/*
+ *  Client creation. Poll data: choices, votes and general info.
+ */
 $curlClient = new CurlClient();
 
 $choices = $curlClient->listChoices($pollId);
 $votes = $curlClient->getVotes($pollId);
 $pollData = $curlClient->getPollData($pollId);
-
-$resultMajority = $curlClient->getResultUrl($pollId);
-$resultCondorcet = $curlClient->getResultUrl($pollId, 'condorcet', 'hbar');
-
-$rawMajority = $curlClient->getResult($pollId);
-$resultMajorityText = stringResult($rawMajority);
-$resultCondorcetText = stringResult($curlClient->getResult($pollId, 'condorcet'));
 $votersData = votersData($votes);
 $nbVots = count ($votersData[0]);
 $voterNames = $votersData[1];
 $nbAnons  = $votersData[2];
+
+/*
+ * Results computation and presentation.
+ * Majority, Condorcet and Instant runoff.
+ */
+$resultMajority = $curlClient->getResultUrl($pollId);
+$resultCondorcet = $curlClient->getResultUrl($pollId, 'condorcet', 'hbar');
+$resultRunoff = $curlClient->getResultUrl($pollId, 'runoff', 'vbar');
+
+$rawMajority = $curlClient->getResult($pollId);
+$resultMajorityText = stringResult($rawMajority);
+$resultCondorcetText = stringResult($curlClient->getResult($pollId, 'condorcet'));
+$resultRunoffText = stringResult($curlClient->getResult($pollId, 'runoff'));
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,11 +49,14 @@ $nbAnons  = $votersData[2];
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <style>
-        .majority {
+        .majority, .btn-cond, .btn-run {
             display: block;
         }
-        .condorcet {
+        .condorcet, .runoff, .btn-maj {
             display: none;
+        }
+        .btn-switch{
+            margin-top: .5em;
         }
         .mybutton{
             min-width: 20em;
@@ -124,9 +135,15 @@ $nbAnons  = $votersData[2];
                             <h2>Condorcet Result</h2>
                             <img src="<?php echo $resultCondorcet->url; ?>">
                         </div>
+                        <div class='runoff'>
+                            <h2>Instant Runoff Result</h2>
+                            <img src="<?php echo $resultRunoff->url; ?>">
+                        </div>
                     </div>
                     <div class="col-md-4" style="margin-top:1em;">
-                        <button id="switch" onclick="switchDisplay()" class="btn mybutton btn-default">Switch to Condorcet result</button>
+                        <button id="switch-cond" onclick="switchDisplay('cond')" class="btn mybutton btn-default btn-cond btn-switch">Switch to Condorcet result</button>
+                        <button id="switch-run" onclick="switchDisplay('run')" class="btn mybutton btn-default btn-run btn-switch">Switch to Instant Runoff result</button>
+                        <button id="switch-maj" onclick="switchDisplay('maj')" class="btn mybutton btn-default btn-maj btn-switch">Switch to Majority result</button>
                     </div>
                 </div>
                 <div class="row">
@@ -139,6 +156,10 @@ $nbAnons  = $votersData[2];
                             <h2>Condorcet Result (textual)</h2>
                             <p><?php echo $resultCondorcetText; ?></p>
                         </div>
+                        <div class="runoff">
+                            <h2>Instant Runoff Result (textual)</h2>
+                            <p><?php echo $resultRunoffText; ?></p>
+                        </div>
                     </div>
                 </div>
                 <div style="margin:2em 0 2em 0; text-align:center;">
@@ -149,22 +170,36 @@ $nbAnons  = $votersData[2];
             </div>
         </div>
         <script type="text/javascript">
-        function switchDisplay() {
-            var x = document.getElementsByClassName('majority');
-            var y = document.getElementsByClassName('condorcet');
-            var button = document.getElementById('switch')
-            if (x[0].style.display === 'none') {
-                x[0].style.display = 'block';
-                x[1].style.display = 'block';
-                y[0].style.display = 'none';
-                y[1].style.display = 'none';
-                button.innerText = 'Switch to Condorcet result' ;
-            } else {
-                x[0].style.display = 'none';
-                x[1].style.display = 'none';
-                y[0].style.display = 'block';
-                y[1].style.display = 'block';
-                button.innerText = 'Switch to majority result';
+        function switchDisplay(resultType) {
+            var divmaj = document.getElementsByClassName('majority');
+            var divcond = document.getElementsByClassName('condorcet');
+            var divrun = document.getElementsByClassName('runoff');
+            var buttons =  document.getElementsByClassName('btn-switch');
+            for (i = 0 ; i < buttons.length ; i++){
+                if (buttons[i].id == 'switch-'.concat(resultType)){
+                    buttons[i].style.display = 'none';
+                }else{
+                    // Buttons default to 'block'.
+                    buttons[i].style.display = 'block';
+                }
+            }
+            // Each of the div classes have the same number of members.
+            // We iterate over divsmaj.length
+            for (i = 0 ; i < divmaj.length ; i++){
+                if (resultType == 'maj'){
+                    divmaj[i].style.display = 'block';
+                    divcond[i].style.display = 'none';
+                    divrun[i].style.display = 'none';
+                }else if (resultType == 'cond'){
+                    divmaj[i].style.display = 'none';
+                    divcond[i].style.display = 'block';
+                    divrun[i].style.display = 'none';
+                }else{
+                    divmaj[i].style.display = 'none';
+                    divcond[i].style.display = 'none';
+                    divrun[i].style.display = 'block';
+
+                }
             }
         }
         </script>
