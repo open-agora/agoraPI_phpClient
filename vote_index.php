@@ -24,10 +24,12 @@ $pollData = $curlClient->getPollData($pollId);
 
 $resultMajority = $curlClient->getResultUrl($pollId);
 $resultCondorcet = $curlClient->getResultUrl($pollId, 'condorcet', 'hbar');
+$resultRunoff = $curlClient->getResultUrl($pollId, 'runoff', 'vbar');
 
 $rawMajority = $curlClient->getResult($pollId);
 $resultMajorityText = stringResult($rawMajority);
 $resultCondorcetText = stringResult($curlClient->getResult($pollId, 'condorcet'));
+$resultRunoffText = stringResult($curlClient->getResult($pollId, 'runoff'));
 $votersData = votersData($votes);
 $nbVots = count ($votersData[0]);
 $voterNames = $votersData[1];
@@ -45,6 +47,9 @@ $nbAnons  = $votersData[2];
             display: block;
         }
         .condorcet {
+            display: none;
+        }
+        .runoff {
             display: none;
         }
         .mybutton{
@@ -124,9 +129,15 @@ $nbAnons  = $votersData[2];
                             <h2>Condorcet Result</h2>
                             <img src="<?php echo $resultCondorcet->url; ?>">
                         </div>
+                        <div class='runoff'>
+                            <h2>Instant Runoff Result</h2>
+                            <img src="<?php echo $resultRunoff->url; ?>">
+                        </div>
                     </div>
                     <div class="col-md-4" style="margin-top:1em;">
-                        <button id="switch" onclick="switchDisplay()" class="btn mybutton btn-default">Switch to Condorcet result</button>
+                        <button id="switch-cond" onclick="switchDisplay('cond')" class="btn mybutton btn-default">Switch to Condorcet result</button>
+                        <button id="switch-run" onclick="switchDisplay('run')" class="btn mybutton btn-default">Switch to Instant Runoff result</button>
+                        <button id="switch-maj" onclick="switchDisplay('maj')" class="btn mybutton btn-default">Switch to majority result</button>
                     </div>
                 </div>
                 <div class="row">
@@ -139,6 +150,10 @@ $nbAnons  = $votersData[2];
                             <h2>Condorcet Result (textual)</h2>
                             <p><?php echo $resultCondorcetText; ?></p>
                         </div>
+                        <div class="runoff">
+                            <h2>Instant Runoff Result (textual)</h2>
+                            <p><?php echo $resultRunoffText; ?></p>
+                        </div>
                     </div>
                 </div>
                 <div style="margin:2em 0 2em 0; text-align:center;">
@@ -149,10 +164,11 @@ $nbAnons  = $votersData[2];
             </div>
         </div>
         <script type="text/javascript">
-        function switchDisplay() {
+        function switchDisplay(param) {
             var x = document.getElementsByClassName('majority');
             var y = document.getElementsByClassName('condorcet');
-            var button = document.getElementById('switch')
+            var z = document.getElementsByClassName('runoff');
+            var button = document.getElementById('switch-'.concat(param));
             if (x[0].style.display === 'none') {
                 x[0].style.display = 'block';
                 x[1].style.display = 'block';
