@@ -52,6 +52,18 @@ $nbAnons  = $votersData[2];
         .runoff {
             display: none;
         }
+        .btn-switch{
+            margin-top: .5em;
+        }
+        .btn-cond {
+            display: block;
+        }
+        .btn-run {
+            display: block;
+        }
+        .btn-maj {
+            display: none;
+        }
         .mybutton{
             min-width: 20em;
             background-color: #ff9700;
@@ -135,9 +147,9 @@ $nbAnons  = $votersData[2];
                         </div>
                     </div>
                     <div class="col-md-4" style="margin-top:1em;">
-                        <button id="switch-cond" onclick="switchDisplay('cond')" class="btn mybutton btn-default">Switch to Condorcet result</button>
-                        <button id="switch-run" onclick="switchDisplay('run')" class="btn mybutton btn-default">Switch to Instant Runoff result</button>
-                        <button id="switch-maj" onclick="switchDisplay('maj')" class="btn mybutton btn-default">Switch to majority result</button>
+                        <button id="switch-cond" onclick="switchDisplay('cond')" class="btn mybutton btn-default btn-cond btn-switch">Switch to Condorcet result</button>
+                        <button id="switch-run" onclick="switchDisplay('run')" class="btn mybutton btn-default btn-run btn-switch">Switch to Instant Runoff result</button>
+                        <button id="switch-maj" onclick="switchDisplay('maj')" class="btn mybutton btn-default btn-maj btn-switch">Switch to majority result</button>
                     </div>
                 </div>
                 <div class="row">
@@ -165,22 +177,33 @@ $nbAnons  = $votersData[2];
         </div>
         <script type="text/javascript">
         function switchDisplay(param) {
-            var x = document.getElementsByClassName('majority');
-            var y = document.getElementsByClassName('condorcet');
-            var z = document.getElementsByClassName('runoff');
-            var button = document.getElementById('switch-'.concat(param));
-            if (x[0].style.display === 'none') {
-                x[0].style.display = 'block';
-                x[1].style.display = 'block';
-                y[0].style.display = 'none';
-                y[1].style.display = 'none';
-                button.innerText = 'Switch to Condorcet result' ;
+            var classmaj = document.getElementsByClassName('majority');
+            var classcond = document.getElementsByClassName('condorcet');
+            var classrun = document.getElementsByClassName('runoff');
+            var bmaj = document.getElementById('switch-maj');
+            var bcond = document.getElementById('switch-cond');
+            var brun = document.getElementById('switch-run');
+            bmaj.style.display = 'block';
+            bcond.style.display = 'block';
+            brun.style.display = 'block';
+            for (i= 0 ; i < classmaj.length ; i++){
+                classmaj[i].style.display = 'none';
+                classcond[i].style.display = 'none';
+                classrun[i].style.display = 'none';
+            }
+            //var button =
+            if (param == 'cond'){
+                classcond[0].style.display = 'block';
+                classcond[1].style.display = 'block';
+                bcond.style.display = 'none'
+            } else if (param == 'maj'){
+                classmaj[0].style.display = 'block';
+                classmaj[1].style.display = 'block';
+                bmaj.style.display = 'none'
             } else {
-                x[0].style.display = 'none';
-                x[1].style.display = 'none';
-                y[0].style.display = 'block';
-                y[1].style.display = 'block';
-                button.innerText = 'Switch to majority result';
+                classrun[0].style.display = 'block';
+                classrun[1].style.display = 'block';
+                brun.style.display = 'none'
             }
         }
         </script>
