@@ -12,7 +12,7 @@ In order to use the files of this repository, you need the following:
 
 1. An AgoraPI access key (and the associated token). You may register on [Open Agora website](https://www.open-agora.com/en/products/api#register) for free.
 1. PHP installed on your machine (or some server). More precisely, you need PHP CLI and PHP Curl above 5.4. We recommend using PHP 7.
-1. Having a running Apache or Nginx is optional since you may try our code with PHP built-in server.
+1. Having a running web server like **Apache** or **Nginx** is optional since you may try our code with PHP built-in server.
 1. That's about it. In case of trouble you may get in touch with us: agorapi@open-agora.com
 
 ## Getting Started
@@ -25,7 +25,7 @@ Assume the downloaded files are located within folder `/agorapiTestClient/`.
 1. Within directory `/agorapiTestClient/`, you may simply type: `php -S localhost:8888 -t .`. You should keep this server running in a console.
 1. In a browser, go to [http://localhost:8888/poll_index.php](http://localhost:8888/poll_index.php).
 
-Alternatively, you may configure Apache or Nginix to access directory `/agorapiTestClient/` from a given URL.
+Alternatively, you may configure **Apache** or **Nginx** to access directory `/agorapiTestClient/` from a given URL.
 
 ## Caveats
 
